@@ -26,7 +26,7 @@ extension Recipe {
     @NSManaged public var totalTime: String
     @NSManaged public var servings: Int
     @NSManaged public var highlights: [String]
-    @NSManaged public var directions: [String]?
+    @NSManaged public var directions: [String]
     @NSManaged public var ingredients: NSSet
 
 }
