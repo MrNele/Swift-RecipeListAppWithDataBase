@@ -24,6 +24,14 @@ struct AddRecipeView: View {
     // Ingredient data
     @State private var ingredients = [IngredientJSON]()
     
+    // Recipe Image
+    @State private var recipeImage: UIImage?
+    
+    // Image picker state
+    @State private var isShowingImagePicker = false
+    @State private var selectedImageSource = UIImagePickerController.SourceType.photoLibrary
+    @State private var placeHolderImage = Image("noImageAvailable")
+        
     var body: some View {
         
         VStack {
@@ -52,8 +60,29 @@ struct AddRecipeView: View {
                 
                 VStack {
                     
-                // The recipe meta data
+                // Recipe image
+               placeHolderImage
+                        .resizable()
+                        .scaledToFit()
                     
+                    HStack {
+                        Button("Photo Library") {
+                            selectedImageSource = .photoLibrary
+                            isShowingImagePicker = true
+                        }
+                        
+                        Text(" | ")
+                        
+                        Button ("Camera") {
+                            selectedImageSource = .camera
+                            isShowingImagePicker = true
+                        }
+                    }
+                    .sheet(isPresented: $isShowingImagePicker, onDismiss: loadImage) {
+                        ImagePicker(selectedSource: selectedImageSource, recipeImage: $recipeImage)
+                    }
+                    
+                    // The recipe meta data
                     AddMetaData(name: $name, summary: $summary, prepTime: $prepTime, cookTime: $cookTime, totalTime: $totalTime, servings: $servings)
                     
                     //List data
@@ -70,6 +99,17 @@ struct AddRecipeView: View {
         }
         .padding(.horizontal)
     }
+    
+    func loadImage() {
+        
+        // Checks if an image was selected from the library
+        if recipeImage != nil {
+            // Sets it as the placeholder image
+            placeHolderImage = Image(uiImage: recipeImage!)
+        }
+        
+    }
+    
     func clear() {
         
         // Clears all the form field
