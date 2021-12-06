@@ -23,7 +23,7 @@ struct AddMetaData: View {
             HStack {
                 Text("Name: ")
                     .bold()
-                TextField("Tuna Casserola", text: $name)
+                TextField("Cevapi", text: $name)
             }
             
             HStack {

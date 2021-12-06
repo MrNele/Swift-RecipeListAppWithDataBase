@@ -39,10 +39,10 @@ struct AddIngredientData: View {
                 Button("Add") {
                     
                     //  Make sure that the fields are populated
-                    let cleanedName = name.trimmingCharacters(in: .whitespaces)
-                    let cleanedNum = num.trimmingCharacters(in: .whitespaces)
-                    let cleanedDenom = denom.trimmingCharacters(in: .whitespaces)
-                    let cleanedUnit = unit.trimmingCharacters(in: .whitespaces)
+                    let cleanedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let cleanedNum = num.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let cleanedDenom = denom.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let cleanedUnit = unit.trimmingCharacters(in: .whitespacesAndNewlines)
                     
                     // Checks that all the fields are filled in
                     if cleanedName == "" || cleanedNum == "" || cleanedDenom == "" || cleanedUnit == ""{

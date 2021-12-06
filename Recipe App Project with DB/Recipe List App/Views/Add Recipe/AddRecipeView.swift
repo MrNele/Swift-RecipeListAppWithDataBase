@@ -9,6 +9,11 @@ import SwiftUI
 
 struct AddRecipeView: View {
     
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    // Tab selection
+    @Binding var tabSelection: Int
+    
     // Properties for recipe meta data
     @State private var name = ""
     @State private var summary = ""
@@ -51,6 +56,9 @@ struct AddRecipeView: View {
                     
                     // Clears the form
                     clear()
+                    
+                    // Navigates to the list
+                    tabSelection = Constants.listTab
                 }
                 
             }
@@ -61,7 +69,7 @@ struct AddRecipeView: View {
                 VStack {
                     
                 // Recipe image
-               placeHolderImage
+                placeHolderImage
                         .resizable()
                         .scaledToFit()
                     
@@ -83,7 +91,12 @@ struct AddRecipeView: View {
                     }
                     
                     // The recipe meta data
-                    AddMetaData(name: $name, summary: $summary, prepTime: $prepTime, cookTime: $cookTime, totalTime: $totalTime, servings: $servings)
+                    AddMetaData(name: $name,
+                                summary: $summary,
+                                prepTime: $prepTime,
+                                cookTime: $cookTime,
+                                totalTime: $totalTime,
+                                servings: $servings)
                     
                     //List data
                     AddListData(list: $highlights, title: "Highlights", placeholderText: "Vegetarian")
@@ -123,19 +136,56 @@ struct AddRecipeView: View {
         highlights = [String]()
         directions = [String]()
         
+        ingredients = [IngredientJSON]()
+        
+        placeHolderImage = Image("noImageAvailable")
         
     }
+    
     func addRecipe() {
         
-        // Adds the recipe into core data
-      
-  
+        // Adds the recipe into Core Data
+        let recipe = Recipe(context: viewContext)
+        recipe.id = UUID()
+        recipe.name = name
+        recipe.cookTime = cookTime
+        recipe.prepTime = prepTime
+        recipe.totalTime = totalTime
+        recipe.servings = Int(servings) ?? 1
+        recipe.directions = directions
+        recipe.highlights = highlights
+        recipe.image = recipeImage?.pngData()
+        
+        // Adds the ingredients
+        for i in ingredients {
+            let ingredient = Ingredient(context: viewContext)
+            ingredient.id = UUID()
+            ingredient.name = i.name
+            ingredient.unit = i.unit
+            ingredient.num = i.num ?? 1
+            ingredient.denom = i.denom ?? 1
+           
+            // Adds this ingredient to the recipe
+            recipe.addToIngredients(ingredient)
+        }
+        
+        // Saves to core data
+        do {
+            // Saves the recipe to core data
+            try viewContext.save()
+            
+            // Switchs the vire to list view
+        }
+        catch {
+            // Couldn't save the recipe
+        }
+        
     }
     
 }
 
 struct AddRecipeView_Previews: PreviewProvider {
     static var previews: some View {
-        AddRecipeView()
+        AddRecipeView(tabSelection: Binding.constant(Constants.addRecipeTab))
     }
 }

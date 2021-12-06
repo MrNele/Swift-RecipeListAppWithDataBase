@@ -22,7 +22,11 @@ struct ImagePicker: UIViewControllerRepresentable {
         // Creates the image picker controller
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = context.coordinator
-        imagePickerController.sourceType = selectedSource
+        
+        // Checks that this source is available first
+        if UIImagePickerController.isSourceTypeAvailable(selectedSource) {
+            imagePickerController.sourceType = selectedSource
+        }
         
         return imagePickerController
     }
@@ -54,7 +58,7 @@ struct ImagePicker: UIViewControllerRepresentable {
                 
                 // Dismiss the view
                 // first way
-//                parent.isShowingImagePicker = false
+                //                parent.isShowingImagePicker = false
                 
                 // second way
                 //**

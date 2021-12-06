@@ -11,7 +11,8 @@ struct RecipeListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-//    @EnvironmentObject var model:RecipeModel
+    // @EnvironmentObject var model:RecipeModel
+    
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)])
     private var recipes: FetchedResults<Recipe>
     
@@ -26,7 +27,8 @@ struct RecipeListView: View {
         else {
             // Filters by the search term and returns a subset of recipes which contains the search term in the name
             return recipes.filter {
-                r in return r.name.contains(filterBy)}
+                r in return r.name.contains(filterBy)                
+            }
         }
     }
     

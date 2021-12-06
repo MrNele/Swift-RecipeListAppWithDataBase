@@ -12,7 +12,7 @@ struct SearchBarView: View {
     @Binding var filterBy: String
     
     var body: some View {
-       
+        
         ZStack {
             Rectangle()
                 .foregroundColor(.white)
@@ -32,7 +32,8 @@ struct SearchBarView: View {
                     Image(systemName: "multiply.circle.fill")
                 }
                 
-            }.padding()
+            }
+            .padding()
         }
         .frame(height: 48)
         .foregroundColor(.gray)
